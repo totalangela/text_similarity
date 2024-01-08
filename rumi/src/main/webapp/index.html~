@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text Processing Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        #loadingContainer {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #loadingMessage {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FF1493;
+        }
+
+        #loadingSpinner {
+            width: 40px;
+            height: 40px;
+            margin-top: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+        th, td {
+            border: 1px solid black; /* Set border to a solid black line */
+            padding: 8px; /* Add padding for better appearance */
+            text-align: left;
+        }
+
+        th {
+            text-align: center
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Text and Internet Content Comparison</h2>
+
+<form id="inputForm" method="post">
+    <label for="userInput">Enter Text:</label>
+    <br />
+    <textarea id="userInput" name="userInput" rows="4" cols="50"></textarea>
+    <br />
+    <button type="button" id="userSubmit" onclick="processText()">Compare</button>
+</form>
+
+<div id="loadingContainer">
+    <div id="loadingMessage">Please wait, processing...</div>
+    <img id="loadingSpinner" src="https://i.gifer.com/origin/34/34338d26023e5515f6cc8969aa027bca.gif" alt="Loading">
+</div>
+<br /><br />
+<table id="resultTable">
+    <thead>
+    <tr>
+        <th>URL</th>
+        <th>Text</th>
+        <th>Similarity Score</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Processed results will be added here dynamically -->
+    </tbody>
+</table>
+
+<script>
+    // Ensure the DOM is fully loaded before executing the script
+    $(document).ready(function () {
+        // Set focus on the input box when the page loads
+        $('#userInput').focus();
+
+        // Trigger processText() when Enter key is released in the input field
+        $('#userInput').keypress(function (e) {
+            if (e.keyCode == 13 || e.which === 13) { // 13 is the ASCII code for Enter key
+                e.preventDefault();
+                processText();
+            }
+        });
+        $('#resultTable').hide();
+    });
+    function processText() {
+        var textareaValue = $("#userInput").val().trim();
+        if (textareaValue === "") {
+            alert("hi, Please enter text in the textarea.");
+        } else {
+            $('#resultTable').hide();
+
+            // Get user input from the form
+            var userInput = $('#userInput').val();
+
+            // Display loading container
+            $('#loadingContainer').show();
+
+            // Use jQuery to send data to the backend
+            $.ajax({
+                url: 'http://localhost:8080/rumi/compare',
+                type: 'POST',
+                data: userInput,
+                contentType: 'text/plain',
+                dataType: 'json',
+                success: function (dataList) {
+                    // Hide loading container
+                    $('#loadingContainer').hide();
+
+                    // Clear existing rows in the table
+                    $('#resultTable tbody').empty();
+
+                    // Update the table with the processed results
+                    $.each(dataList, function (index, data) {
+                        $('#resultTable tbody').append('<tr><td><a href=' + data.url + ' target="_blank">' + data.url + '</a></td><td>' + data.text + '</td><td style="text-align:right">' + data.similarityScoreStr + '</td></tr>');
+                    });
+
+                    // Display the table
+                    $('#resultTable').show();
+                },
+                error: function () {
+                    // Hide loading container
+                    $('#loadingContainer').hide();
+
+                    alert('Error processing text on the server');
+                }
+            });
+        }
+    }
+</script>
+
+</body>
+</html>

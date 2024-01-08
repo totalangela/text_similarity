@@ -1,0 +1,5 @@
+com\rumi\textcompare\controller\WebSearcher.class
+com\rumi\textcompare\controller\TextComparator.class
+com\rumi\textcompare\view\TextCompareServlet.class
+com\rumi\textcompare\model\TextSimilarity.class
+com\rumi\textcompare\controller\JsonParser.class
