@@ -2,7 +2,7 @@
  
 Angela Li (UC Berkeley ‘24)
 
-![rumi](https://github.com/totalangela/text_similarity/assets/76748709/2302aa6d-d0bc-423e-b8d6-4bb3f87b6199)
+![rumi](https://github.com/totalangela/text_similarity/assets/76748709/289e2fad-e962-4479-9f81-4a919a66ddce)
 
 **Overview**
 
