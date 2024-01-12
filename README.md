@@ -18,6 +18,7 @@ mvn clean package
 **How to run the application**
 
 cd to the project root directory and run the following command:
+
 mvn jetty:run
 
 
